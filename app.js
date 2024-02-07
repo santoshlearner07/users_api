@@ -29,8 +29,10 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.post("/postotp", async (req, res) => {
+app.post("/handleotp", async (req, res) => {
   const userEmail = req.body.email;
+  const userName = req.body.name;
+  let randomOTP = Math.floor(Math.random() * 1000000);
   let config = {
     service: "gmail",
     auth: {
@@ -44,16 +46,16 @@ app.post("/postotp", async (req, res) => {
   let mailGenerator = new mailGen({
     theme: "default",
     product: {
-      name: "MailGen",
+      name: "Multi User",
       link: "https://mailgen.js/",
     },
   });
 
   let response = {
     body: {
-      name: "Santosh",
-      intro: "Your OTP",
-      outro: "1122",
+      name: userName,
+      intro: "Your One Time Password",
+      outro: randomOTP,
     },
   };
 
@@ -70,6 +72,7 @@ app.post("/postotp", async (req, res) => {
     .then(() => {
       return res.status(201).json({
         msg: "You should receive an email",
+        otp:randomOTP
       });
     })
     .catch((err) => {
