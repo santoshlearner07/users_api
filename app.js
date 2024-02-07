@@ -29,10 +29,8 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// const getMail = (req,res)=>{
 app.post("/postotp", async (req, res) => {
-  const userEmail = req.body;
-  console.log(userEmail);
+  const userEmail = req.body.email;
   let config = {
     service: "gmail",
     auth: {
@@ -46,7 +44,7 @@ app.post("/postotp", async (req, res) => {
   let mailGenerator = new mailGen({
     theme: "default",
     product: {
-      name: "Multi User",
+      name: "MailGen",
       link: "https://mailgen.js/",
     },
   });
@@ -54,8 +52,8 @@ app.post("/postotp", async (req, res) => {
   let response = {
     body: {
       name: "Santosh",
-      intro: "Your One Time Password",
-      outro: "112233",
+      intro: "Your OTP",
+      outro: "1122",
     },
   };
 
@@ -63,21 +61,20 @@ app.post("/postotp", async (req, res) => {
 
   let message = {
     from: EMAIL,
-    to: "abc@gmail.com",
-    subject: "One Time Password",
+    to: userEmail,
+    subject: "Your OTP",
     html: mail,
   };
   transporter
     .sendMail(message)
     .then(() => {
       return res.status(201).json({
-        msg: "You Should receive an email",
+        msg: "You should receive an email",
       });
     })
     .catch((err) => {
       return res.status(500).json({ err });
     });
-  // res.status(201).json("Get Mail Successfully");
 });
 
 app.post("/users", async (req, res) => {
