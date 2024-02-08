@@ -72,7 +72,7 @@ app.post("/handleotp", async (req, res) => {
     .then(() => {
       return res.status(201).json({
         msg: "You should receive an email",
-        otp:randomOTP
+        otp: randomOTP,
       });
     })
     .catch((err) => {
@@ -154,6 +154,26 @@ app.put("/todos/:userId/:todoId", async (req, res) => {
     }
     res.status(200).json(todoItem);
     console.log(todoItem);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete("/users/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.deleteOne({ userId });
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete("/todos/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await Todos.deleteMany({ userId });
+    res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
